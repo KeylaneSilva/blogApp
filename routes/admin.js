@@ -5,12 +5,12 @@ router.get('/', (req,res) => {
     res.render("admin/index")
 })
 
-router.get('/posts', (req,res) => {
-    res.send("Página dos POSTS")
+router.get('/categorias', (req,res) => {
+    res.render("admin/categorias")
 })
 
-router.get("/categorias", (req,res) => {
-    res.send("Página de categoria")
+router.get('/categorias/add', (req,res) => {
+    res.render("admin/addcategorias")
 })
 
 module.exports = router
