@@ -20,6 +20,10 @@
         app.use(express.static(path.join(__dirname, "public")))
 
 // Rotas
+    app.get("/", (req,res) => {
+        res.send("Pagina princiapal")
+    } )
+
     app.use('/admin', admin)
 
 // Outros
