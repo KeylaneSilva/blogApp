@@ -3,6 +3,7 @@
     const app = express()
     const handlebars = require('express-handlebars')
     const bodyParser = require('body-parser')
+    const admin = require('./routes/admin.js')
     //const mongoose = require('mongoose')
 
 // Configurações
@@ -16,9 +17,10 @@
         // em breve
 
 // Rotas
+    app.use('/admin', admin)
 
 // Outros
 const PORT = 8081
 app.listen(PORT,() => {
-    console.log('Servidor rodando com sucesso...')
+    console.log('Servidor rodando na porta 8081')
 })
