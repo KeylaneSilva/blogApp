@@ -17,6 +17,13 @@ router.get('/categorias/add', (req,res) => {
 })
 
 router.post('/categorias/nova', (req, res) =>{
+    // Validação do formulario
+    var erros = []
+
+    if(!req.body.nome && !req.body.slug){
+            
+    }
+    
     const novaCategoria = {
         nome: req.body.nome,
         slug: req.body.slug
