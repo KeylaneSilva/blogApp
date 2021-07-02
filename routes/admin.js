@@ -9,7 +9,7 @@ router.get('/', (req,res) => {
 })
 
 router.get('/categorias', (req,res) => {
-    Categoria.find().then((categorias) => {
+    Categoria.find().sort({data: 'desc'}).lean().then((categorias) => {
         res.render("admin/categorias", {categorias: categorias})
     }).catch((err) =>{
         req.flash("error_msg", "Houve um erro ao listar as categorias")
