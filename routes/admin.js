@@ -40,7 +40,7 @@ router.post('/categorias/nova', (req, res) =>{
         
         new Categoria(novaCategoria).save().then(() =>{
             req.flash("success_msg", "Categoria criada com sucesso!")
-            res.redirect("admin/categorias")
+            res.redirect("/admin/categorias")
         }).catch((err) => {
             req.flash("error_msg", "Houve um erro ao tentar salvar a categoria, tente novamente!")
             console.log("Eroo ao salvar categoria: "+err)
@@ -58,7 +58,7 @@ router.get('/categorias', (req,res) => {
     })
 })
 
-// Capturando o id da categoria 
+// Capturando o id da categoria para editar
 router.get('/categorias/edit/:id', (req, res) => {
     Categoria.findOne({_id: req.params.id}).lean().then((categoria) => {
         res.render("admin/editcategorias", {categoria: categoria})
@@ -93,7 +93,7 @@ router.post('/categorias/edit', (req, res) => {
 router.post("/categorias/deletar", (req, res) => {
     Categoria.remove({_id: req.body.id}).then(() => {
         req.flash("success_msg", "Categoria deletada com sucess!")
-        res.redirect("admin/categorias")
+        res.redirect("/admin/categorias")
     }).catch((err) => {
         req.flash("error_msg", "Houve um erro ao tentar apagar a categoria")
         res.redirect("admin/categorias")
@@ -118,22 +118,56 @@ router.get("/postagens/add", (req, res) =>{
 // Salvando postagens
 router.post('/postagens/nova', (req, res) => {
     //Validação do form
+    erros = []
 
-    const novaPostagem = {
-        titulo: req.body.titulo,
-        slug: req.body.slug,
-        descricao: req.body.descricao,
-        categoria: req.body.categoria,
-        data: req.body.data
+    if(!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null){
+        erros.push({texto: 'Titulo inválido'})
     }
-
-    new Postagem(novaPostagem).save().then(() => {
-        req.flash("success_msg", "Postagem cadastrada com sucesso")
-        res.redirect("admin/postagens")
-    }).catch((err) => {
-        req.flash("error_msg", "Houve um erro ao tentar salvar a postagem, tente novamente!")
+    if(!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null){
+        erros.push({texto: 'Slug inválido'})
+    }
+    if(!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null){
+        erros.push({texto: 'Descrição inválida'})
+    }
+    if(!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null){
+        erros.push({texto: 'Conteúdo inválida'})
+    }
+    if(erros.length > 0){
+        res.render("admin/addpostagens", {erros: erros})
+    }else{
+        const novaPostagem = {
+            titulo: req.body.titulo,
+            slug: req.body.slug,
+            descricao: req.body.descricao,
+            conteudo: req.body.conteudo,
+            categoria: req.body.categoria,
+            data: req.body.data
+        }
+        
+        new Postagem(novaPostagem).save().then(() => {
+            req.flash("success_msg", "Postagem cadastrada com sucesso")
+            res.redirect("/admin/postagens")
+        }).catch((err) => {
+            req.flash("error_msg", "Houve um erro ao tentar salvar a postagem, tente novamente!")
             console.log("Erro ao salvar postagem: "+err)
+        })
+    }   
+})
+
+// Listando postagens
+/*
+router.get('/postagens', (req, res) => {
+
+    Postagem.find().populate("categoria").sort({data: 'desc'}).lean().then((postagens) => {
+        res.render("admin/postagens", {postagens: postagens})
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro ao tentar listar as tarefas" +err)
+        res.redirect('/admin')
+
     })
 })
+*/
+
+
 
 module.exports = router
