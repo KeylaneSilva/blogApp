@@ -100,11 +100,6 @@ router.post("/categorias/deletar", (req, res) => {
     })
 })
 
-// Cadastrar postagem
-router.get('/postagens', (req, res) => {
-    res.render("admin/postagens")
-})
-
 // Formulário de postagem
 router.get("/postagens/add", (req, res) =>{
     Categoria.find().lean().then((categorias) => {
@@ -155,10 +150,9 @@ router.post('/postagens/nova', (req, res) => {
 })
 
 // Listando postagens
-/*
 router.get('/postagens', (req, res) => {
-
     Postagem.find().populate("categoria").sort({data: 'desc'}).lean().then((postagens) => {
+        req.flash("success_msg", "Aqui")
         res.render("admin/postagens", {postagens: postagens})
     }).catch((err) => {
         req.flash("error_msg", "Houve um erro ao tentar listar as tarefas" +err)
@@ -166,8 +160,5 @@ router.get('/postagens', (req, res) => {
 
     })
 })
-*/
-
-
 
 module.exports = router
