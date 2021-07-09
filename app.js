@@ -8,6 +8,8 @@
     const path = require('path')
     const session = require('express-session')
     const flash = require('connect-flash')
+    require("./models/Postagem")
+    const Postagem = mongoose.model("postagens")
 
 // Configurações
     // Sessão
@@ -43,14 +45,23 @@
     
 
 // Rotas
-    app.get("/", (req,res) => {
-        res.send("Pagina princiapal")
-    } )
+    app.get('/', (req,res) => {
+        Postagem.find().populate("categoria").sort({data: 'desc'}).lean().then((postagens) => {
+            res.render("index", {postagens: postagens})
+        }).catch((err) => {
+            req.flash("error_msg", "Houve um erro interno")
+            res.redirect("/404")
+        })
+    })
+
+    app.get('/404', (req, res) => {
+        res.send('Erro 404')
+    })
 
     app.use('/admin', admin)
 
 // Outros
-const PORT = 8081
-app.listen(PORT,() => {
-    console.log('Servidor rodando na porta 8081')
-})
+    const PORT = 8081
+    app.listen(PORT,() => {
+        console.log('Servidor rodando na porta 8081')
+    })
