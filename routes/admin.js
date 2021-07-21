@@ -1,3 +1,4 @@
+const { json } = require('body-parser')
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
@@ -51,6 +52,7 @@ router.post('/categorias/nova', (req, res) =>{
 // Listando registros
 router.get('/categorias', (req,res) => {
     Categoria.find().sort({data: 'desc'}).lean().then((categorias) => {
+        //res.json(categorias)
         res.render("admin/categorias", {categorias: categorias})
     }).catch((err) =>{
         req.flash("error_msg", "Houve um erro ao listar as categorias")

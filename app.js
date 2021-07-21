@@ -15,6 +15,7 @@
     const usuarios = require('./routes/usuario')
     const passport = require('passport')
     require('./config/auth')(passport)
+    const {eAdmin} = require('./helpers/eAdmin')
 
 
 // Configurações
@@ -31,6 +32,8 @@
         app.use((req, res, next) => {
             res.locals.success_msg = req.flash("success_msg")
             res.locals.error_msg = req.flash("error_msg")
+            res.locals.error = req.flash("error")
+            res.locals.user = req.user || null; // Armazenando dados do usuário logado
             next()
         })    
 
@@ -62,7 +65,7 @@
         })
     })
 
-    app.get('/postagem/:slug', (req, res) => {
+    app.get('/postagem/:slug', eAdmin, (req, res) => {
         Postagem.findOne({slug: req.params.slug}).lean().then((postagem) => {
             if(postagem){
                 res.render("postagem/index", {postagem: postagem})
@@ -77,7 +80,7 @@
     })
 
     // Página de categorias
-    app.get('/categorias', (req, res) => {
+    app.get('/categorias', eAdmin, (req, res) => {
         Categoria.find().lean().then((categorias) => {
             res.render('categorias/index', {categorias: categorias})
         }).catch((err) => {
@@ -87,7 +90,7 @@
     })
 
     // Linkando as categorias com as postagens
-    app.get('/categorias/:slug', (req, res) => {
+    app.get('/categorias/:slug', eAdmin, (req, res) => {
         Categoria.findOne({slug: req.params.slug}).lean().then((categoria) => {
             if(categoria){
                 Postagem.find({categoria: categoria._id}).then((postagens) => {
