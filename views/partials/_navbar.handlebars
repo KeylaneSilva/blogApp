@@ -16,14 +16,16 @@
           <a class="nav-link" href="../categorias/">Categorias</a>
         </li>
         {{#if user}}
-
+            <li class="nav-item">
+              <a class="nav-link" href="/usuarios/logout">Sair</a>
+            </li>
         {{else}}
-        <li class="nav-item">
-          <a href="../usuario/login.handlebars" class="nav-link">Login</a>
-        </li>
-        <li class="nav-item">
-          <a href="../usuario/registro.handlebars" class="nav-link">Registro</a>
-        </li>
+            <li class="nav-item">
+              <a href="usuarios/login" class="nav-link">Login</a>
+            </li>
+            <li class="nav-item">
+              <a href="usuarios/registro" class="nav-link">Registro</a>
+            </li>
         {{/if}}
       </ul>
     </div>
