@@ -15,7 +15,7 @@
     const usuarios = require('./routes/usuario')
     const passport = require('passport')
     require('./config/auth')(passport)
-    const {eAdmin} = require('./helpers/eAdmin')
+    const {eAdmin} = require('./helpers/eAdmin') //restrição nas rotas
 
 
 // Configurações
